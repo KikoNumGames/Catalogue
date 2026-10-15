@@ -4,19 +4,6 @@ Bienvenue sur **NumWorks Games**, un catalogue communautaire regroupant des jeux
 
 L'objectif est de réunir les fichiers nécessaires au même endroit, avec une interface simple, des téléchargements directs et un tutoriel d'installation.
 
-## 📂 Organisation du projet
-
-```text
-NumWorks-Game-Catalogue/
-├── index.html
-├── README.md
-└── files/
-    ├── numplay.nwa
-    ├── nofrendo.nwa
-    ├── 2048.nes
-    └── autres-fichiers...
-```
-
 ## 🎮 Catégories
 
 ### 1. Jeux simples
