@@ -1,1 +1,576 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NumWorks Games</title>
+<meta name="theme-color" content="#080d19">
+
+<style>
+:root {
+  --bg: #080d19;
+  --panel: #111a2c;
+  --panel2: #17233a;
+  --blue: #60a5fa;
+  --purple: #a78bfa;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #27364f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 55px 20px 40px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at top, #1e3a8a66, transparent 65%),
+    linear-gradient(180deg, #101a30, var(--bg));
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px solid #3b82f655;
+  background: #1d4ed822;
+  border-radius: 30px;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+h1 {
+  margin: 20px 0 8px;
+  font-size: clamp(30px, 6vw, 52px);
+  letter-spacing: -1.5px;
+}
+
+h1 span { color: var(--blue); }
+
+header p {
+  max-width: 550px;
+  margin: auto;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+main {
+  width: min(1100px, 92%);
+  margin: 35px auto 70px;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 35px;
+}
+
+.search input {
+  width: 100%;
+  padding: 15px 17px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  outline: none;
+  background: var(--panel);
+  color: white;
+  font-size: 15px;
+}
+
+.search input:focus { border-color: var(--blue); }
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 38px 0 8px;
+  font-size: 25px;
+}
+
+.section-title .icon { font-size: 27px; }
+
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 17px;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px;
+  background: linear-gradient(145deg, var(--panel), #0c1322);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  transition: transform .2s, border-color .2s;
+}
+
+.game:hover {
+  transform: translateY(-3px);
+  border-color: #3b82f6aa;
+}
+
+.game-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-icon { font-size: 34px; }
+
+.tag {
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 20px;
+  color: var(--blue);
+  background: #1d4ed822;
+  border: 1px solid #3b82f644;
+}
+
+.game h3 { margin: 17px 0 7px; font-size: 19px; }
+
+.game p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.filename {
+  color: #cbd5e1;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  margin-top: auto;
+  margin-bottom: 13px;
+}
+
+.download {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: var(--blue);
+  color: #07111f;
+  font-weight: 800;
+  padding: 12px;
+  border-radius: 10px;
+  transition: filter .2s;
+}
+
+.download:hover { filter: brightness(1.12); }
+
+.download.nes {
+  background: #a78bfa;
+}
+
+.subheading {
+  font-size: 19px;
+  margin: 28px 0 15px;
+}
+
+.tutorial {
+  margin-top: 45px;
+  padding: 25px;
+  background: linear-gradient(135deg, #17255455, var(--panel));
+  border: 1px solid #3b82f655;
+  border-radius: 17px;
+}
+
+.tutorial h2 { margin-top: 0; }
+.tutorial p { color: var(--muted); line-height: 1.7; }
+
+.empty {
+  display: none;
+  color: var(--muted);
+  padding: 25px 0;
+}
+
+footer {
+  padding: 25px 15px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 500px) {
+  header { padding-top: 38px; }
+  .section-title { font-size: 22px; }
+  .game { padding: 17px; }
+}
+
+.tutorial {
+  margin-top: 45px;
+  padding: 25px;
+  background: linear-gradient(145deg, #111a2c, #0c1322);
+  border: 1px solid #27364f;
+  border-radius: 17px;
+  color: #f1f5f9;
+}
+
+.tutorial h2 {
+  margin-top: 0;
+  font-size: 27px;
+}
+
+.tutorial-part {
+  margin-top: 25px;
+  padding: 20px;
+  background: #17233a;
+  border: 1px solid #27364f;
+  border-radius: 13px;
+}
+
+.tutorial-part h3 {
+  margin-top: 0;
+  color: #60a5fa;
+  font-size: 20px;
+}
+
+.tutorial-part h4 {
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: #c4b5fd;
+}
+
+.tutorial-part p,
+.tutorial-part li,
+.tutorial-footer {
+  color: #cbd5e1;
+  line-height: 1.8;
+}
+
+.tutorial-part li {
+  padding-left: 5px;
+  margin-bottom: 6px;
+}
+
+.tutorial a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.tutorial a:hover {
+  text-decoration: underline;
+}
+
+.tutorial code {
+  color: #a78bfa;
+  background: #080d19;
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+
+.tutorial-note {
+  margin-top: 20px;
+  padding: 13px;
+  background: #0c1322;
+  border-left: 3px solid #a78bfa;
+  border-radius: 5px;
+}
+
+.tutorial-footer {
+  margin-bottom: 0;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">COMMUNITY PROJECT</div>
+  <h1>NumWorks <span>Games</span></h1>
+  <p>
+    Catalogue de jeux pour calculatrice NumWorks.
+    Découvrez les jeux disponibles pour la calculatrice NumWorks.
+  </p>
+</header>
+
+<main>
+
+  <section>
+    <h2 class="section-title">
+      <span class="icon">🎮</span> Jeux simples
+    </h2>
+    <p class="subtitle">
+      Des applications à installer directement sur ta calculatrice.
+    </p>
+
+    <div class="grid" id="simple-games">
+
+  <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">🕹️</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>NumPlay</h3>
+        <p>Pleins de petits jeux connus.</p>
+        <div class="filename">NumPlay.nwa</div>
+        <a class="download" href="files/NumPlay.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">🪨</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>NumPowder</h3>
+        <p>Bac à sable complet.</p>
+        <div class="filename">NumPowder.nwa</div>
+        <a class="download" href="files/NumPowder.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">☁️</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>Final Earth 2</h3>
+        <p>Construisez une ville sur des îles flottantes dans l'espace</p>
+        <div class="filename">FinalEarth2.nwa</div>
+        <a class="download" href="files/FinalEarth2.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">⚔️</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>Hollow Knight</h3>
+        <p>Du Passage du Roi jusqu’à Hornet dans le Sentier verdoyant</p>
+        <div class="filename">HollowKnigh.nwa</div>
+        <a class="download" href="files/HollowKnight.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">🍓</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>Celeste</h3>
+        <p>Toute l’ascension, avec chaque face B et chaque face C</p>
+        <div class="filename">Celeste.nwa</div>
+        <a class="download" href="files/Celeste.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">👑</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>Champion Island</h3>
+        <p>L'île entière et ses sept sports</p>
+        <div class="filename">ChampionIsland.nwa</div>
+        <a class="download" href="files/ChampionIsland.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">🔫</span>
+          <span class="tag">APPLICATION</span>
+        </div>
+        <h3>Doom</h3>
+        <p>Affronte des hordes de démons dans un FPS culte adapté à NumWorks!</p>
+        <div class="filename">DOOM.nwa</div>
+        <a class="download" href="files/DOOM.nwa" download>
+          ↓ Télécharger fichier
+        </a>
+      </article>
+      <article class="game" data-search="numplay application jeu">
+        <div class="game-top">
+          <span class="game-icon">❗</span>
+          <span class="tag">A venir...</span>
+        </div>
+        <h3>A venir...</h3>
+        <p>Plus de jeux sont en cours de develloppement (ex: Undertale)</p>
+      </article>
+      
+
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">
+      <span class="icon">🧩</span> Jeux complexes
+    </h2>
+    <p class="subtitle">
+      Certains jeux nécessitent un émulateur et des fichiers de données.
+    </p>
+
+    <h3 class="subheading">🖥️ Émulateur NES</h3>
+
+    <div class="grid">
+      <article class="game" data-search="nofrendo nes emulateur">
+        <div class="game-top">
+          <span class="game-icon">🎛️</span>
+          <span class="tag">ÉMULATEUR</span>
+        </div>
+        <h3>NoFrendo</h3>
+        <p>
+          Émulateur NES pour NumWorks.
+          Il nécessite un fichier de données de jeu compatible.
+        </p>
+        <div class="filename">nofrendo.nwa</div>
+        <a class="download" href="files/nofrendo.nwa" download>
+          ↓ Télécharger l'émulateur
+        </a>
+      </article>
+    </div>
+
+    <h3 class="subheading">🎲 Données jeux NES</h3>
+    <p class="subtitle">
+      Les fichiers de jeux à utiliser avec l'émulateur.
+    </p>
+
+    <div class="grid" id="nes-games">
+
+      <article class="game" data-search="2048 demonstration nes">
+        <div class="game-top">
+          <span class="game-icon">🔢</span>
+          <span class="tag">NES</span>
+        </div>
+        <h3>2048 — Démo</h3>
+        <p>Fichier de démonstration du jeu 2048 fourni par le dépôt NoFrendo.</p>
+        <div class="filename">2048.nes</div>
+        <a class="download nes" href="files/2048.nes" download>
+          ↓ Télécharger le .nes
+        </a>
+      </article>
+      <article class="game" data-search="2048 demonstration nes">
+        <div class="game-top">
+          <span class="game-icon">👑</span>
+          <span class="tag">NES</span>
+        </div>
+        <h3>Legend of Zelda</h3>
+        <p>Pars à l’aventure avec Link pour explorer des donjons, résoudre des énigmes et sauves le royaume d’Hyrule.</p>
+        <div class="filename">Zelda.nes</div>
+        <a class="download nes" href="files/Zelda.nes" download>
+          ↓ Télécharger le .nes
+        </a>
+      </article>
+      <article class="game" data-search="2048 demonstration nes">
+        <div class="game-top">
+          <span class="game-icon">🏰</span>
+          <span class="tag">NES</span>
+        </div>
+        <h3>Super Marion Bros</h3>
+        <p>Traverse des mondes colorés, évite les obstacles et affronte Bowser pour sauver la princesse Peach.</p>
+        <div class="filename">Mario.nes</div>
+        <a class="download nes" href="files/Mario.nes" download>
+          ↓ Télécharger le .nes
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  
+<section class="tutorial" id="tutoriel">
+  <h2>Guide d'installation</h2>
+
+  <div class="tutorial-part">
+    <h3>1. Jeux simples (.nwa)</h3>
+    <p>Installer facilement les jeux sur sta calculatrice NumWorks.</p>
+
+    <ol>
+      <li>Choisir un jeu dans le catalogue.</li>
+      <li>Cliquer sur son bouton de téléchargement pour récupérer le fichier <code>.nwa</code>.</li>
+      <li>Connecter sa calculatrice à son ordinateur avec un câble USB ou à son téléphone avec un cable double USB-C ou un adaptateur.</li>
+      <li>Ouvrir le site officiel :
+        <a href="https://my.numworks.com/apps" target="_blank" rel="noopener noreferrer">
+          Transfert d'applications NumWorks
+        </a>. (La connection à un compte numworks est requise).
+      </li>
+      <li>Importer le ficher <code>(.nwa)</code> puis lancer le transfere.</li>
+      <li>Une fois le transfert terminé, débrancher et lancer le jeu depuis la calculatrice.</li>
+    </ol>
+  </div>
+
+
+  <div class="tutorial-part">
+    <h3>2. Jeux complexes — Émulateur NES</h3>
+    <p>Ces jeux nécessitent un émulateur et un fichier de données de jeu au format <code>.nes</code>.</p>
+
+    <h4>Étape 1 — Installer l'émulateur</h4>
+    <ol>
+      <li>Dans la catégorie « Jeux complexes », télécharger <code>nofrendo.nwa</code>.</li>
+    </ol>
+
+    <h4>Étape 2 — Télécharger un jeu NES</h4>
+    <ol>
+      <li>Choisir un jeu dans la sous-catégorie « Jeux NES ».</li>
+      <li>Télécharger le fichier correspondant au format <code>.nes</code>.</li>
+      <li>Conserver ce fichier pour l'étape suivante.</li>
+    </ol>
+
+    <h4>Étape 3 — Charger le jeu</h4>
+    <ol>
+      <li>Importer tout d'abord le fichier de l'émulateur <code>(.nwa)</code>.</li>
+      <li>Importer ensuite le fichier de données du jeu dans l'emplacement définit <code>(.nes)</code>.</li>
+      <li>Débrancher votre calculatrice et lancer le jeu une fois l'installation terminée.</li>
+    </ol>
+
+    <p class="tutorial-note">
+      <strong>Important :</strong> Veillez à bien avoir la derniere mise a jour avant de télécharger le jeu sur votre calculatrice. Sans cela, ça pourrait ne pas fonctionner.
+    </p>
+  </div>
+
+  <p class="tutorial-footer">
+    Vérifie toujours la compatibilité des fichiers avec ta calculatrice NumWorks.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  Catalogue communautaire NumWorks · Projet indépendant
+</footer>
+
+<script>
+const search = document.getElementById("search");
+const cards = [...document.querySelectorAll(".game")];
+const empty = document.getElementById("empty");
+
+search.addEventListener("input", () => {
+  const query = search.value.trim().toLowerCase();
+  let visible = 0;
+
+  cards.forEach(card => {
+    const matches = (
+      card.innerText + " " +
+      (card.dataset.search || "")
+    ).toLowerCase().includes(query);
+
+    card.style.display = matches ? "" : "none";
+    if (matches) visible++;
+  });
+
+  empty.style.display = visible ? "none" : "block";
+});
+</script>
+
+</body>
+</html>
