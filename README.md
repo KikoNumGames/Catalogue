@@ -24,25 +24,10 @@ Cette catégorie regroupe les jeux qui nécessitent plusieurs fichiers.
 
 Le fonctionnement dépend de la compatibilité de chaque fichier avec l'émulateur et la version du système NumWorks utilisée.
 
-## 📥 Téléchargements
-
-Les fichiers téléchargeables sont regroupés dans le dossier `files/`.
-
-Pour ajouter un jeu :
-1. Place le fichier correspondant dans `files/`.
-2. Ajoute sa fiche dans `index.html`.
-3. Vérifie que le lien de téléchargement correspond exactement au nom du fichier.
-4. Teste le téléchargement depuis le site publié.
-
 ## 📘 Tutoriel
 
 Un tutoriel d'installation sera ajouté prochainement pour expliquer comment transférer les applications et utiliser les fichiers nécessaires.
 
-## 🌐 Hébergement
-
-Le catalogue est conçu pour être hébergé gratuitement avec **GitHub Pages**.
-
-Une fois le site publié, son adresse pourra être partagée avec un QR code afin de permettre à d'autres utilisateurs d'accéder facilement au catalogue.
 
 ## ⚖️ Crédits et droits d'utilisation
 
