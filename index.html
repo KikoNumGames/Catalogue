@@ -8,6 +8,43 @@
 <meta name="theme-color" content="#080d19">
 
 <style>
+/* Style pour les sous-catégories (tags de genre) */
+.game-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0 5px;
+}
+
+.sub-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  color: var(--purple);
+  background: #7c3aed22;
+  border: 1px solid #8b5cf644;
+}
+
+/* Style pour le sélecteur de versions modifiées */
+.version-selector {
+  margin: 10px 0;
+}
+
+.version-selector select {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--panel2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  font-size: 13px;
+}
+
+.version-selector select:focus {
+  border-color: var(--blue);
+}
+
 :root {
   --bg: #080d19;
   --panel: #111a2c;
@@ -366,6 +403,33 @@ footer {
           ↓ Télécharger fichier
         </a>
       </article>
+      <article class="game" data-search="balatro application jeu poker roguelike admin panel">
+  <div class="game-top">
+    <span class="game-icon">🃏</span>
+    <span class="tag">APPLICATION</span>
+  </div>
+  
+  <div class="game-tags">
+    <span class="sub-tag">Roguelike</span>
+    <span class="sub-tag">Poker</span>
+  </div>
+
+  <h3>Balatro</h3>
+  <p>Le jeu de deck-building inspiré du poker, adapté sur NumWorks.</p>
+
+  <div class="version-selector">
+    <select onchange="updateDownloadLink(this)">
+      <option value="files/Balatro.nwa" data-filename="Balatro.nwa">Version Standard</option>
+      <option value="files/BalatroAdmin.nwa" data-filename="BalatroAdmin.nwa">Mod : Version avec Admin Panel (Touche "1")</option>
+    </select>
+  </div>
+
+  <div class="filename">Balatro.nwa</div>
+  
+  <a class="download" href="files/Balatro.nwa" download>
+    ↓ Télécharger fichier
+  </a>
+</article>
       <article class="game" data-search="numplay application jeu">
         <div class="game-top">
           <span class="game-icon">🪨</span>
@@ -754,6 +818,20 @@ search.addEventListener("input", () => {
 
   empty.style.display = visible ? "none" : "block";
 });
+
+// Fonction pour mettre à jour le lien de téléchargement selon la version choisie
+function updateDownloadLink(selectElement) {
+  const card = selectElement.closest('.game');
+  const downloadBtn = card.querySelector('.download');
+  const filenameDisplay = card.querySelector('.filename');
+  
+  const selectedOption = selectElement.options[selectElement.selectedIndex];
+  const fileUrl = selectedOption.value;
+  const fileName = selectedOption.getAttribute('data-filename');
+  
+  downloadBtn.href = fileUrl;
+  filenameDisplay.textContent = fileName;
+}
 </script>
 
 </body>
