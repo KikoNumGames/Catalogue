@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -516,6 +515,14 @@ footer {
         </div>
         <h3>Binding Of Isaac</h3>
         <p>Une partie complète : du sous-sol jusqu’à Maman, son cœur, le Shéol et la Cathédrale.</p>
+
+        <div class="version-selector">
+    <select onchange="updateDownloadLink(this)">
+      <option value="files/BindingOfIsaac.nwa" data-filename="BindingOfIsaac.nwa">Version Standard</option>
+      <option value="files/AdminOfIsaac.nwa" data-filename="AdminOfIsaac.nwa">Mod : Version avec Admin Panel (Touche "Ans")</option>
+    </select>
+        </div>
+        
         <div class="filename">BindingOfIsaac.nwa</div>
         <a class="download" href="files/BindingOfIsaac.nwa" download>
           ↓ Télécharger fichier
