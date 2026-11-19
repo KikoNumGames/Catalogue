@@ -239,6 +239,17 @@ main {
   background: #a78bfa;
 }
 
+.download-count {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.download-count strong {
+  color: var(--blue);
+}
+
 .subheading {
   font-size: 19px;
   margin: 28px 0 15px;
@@ -1149,6 +1160,20 @@ footer {
 <script>
 const search = document.getElementById("search");
 const cards = [...document.querySelectorAll(".game")];
+
+// Initialisation des compteurs
+cards.forEach(card => {
+    const button = card.querySelector(".download");
+
+    if (!button) return;
+
+    const counter = document.createElement("div");
+    counter.className = "download-count";
+    counter.innerHTML = '⬇ <strong>Chargement...</strong> téléchargements';
+
+    button.parentNode.insertBefore(counter, button);
+});
+
 const empty = document.getElementById("empty");
 
 search.addEventListener("input", () => {
@@ -1181,6 +1206,122 @@ function updateDownloadLink(selectElement) {
   downloadBtn.href = fileUrl;
   filenameDisplay.textContent = fileName;
 }
+
+const API_URL = "URL_DE_TON_BACKEND";
+
+// Récupérer le nom du fichier
+function getFileName(url) {
+    return url.split("/").pop().split("?")[0];
+}
+
+// Récupérer tous les fichiers téléchargeables
+function getAllDownloadFiles() {
+    const files = new Set();
+
+    cards.forEach(card => {
+        const button = card.querySelector(".download");
+
+        if (button) {
+            files.add(getFileName(button.getAttribute("href")));
+        }
+
+        card.querySelectorAll(".version-selector option").forEach(option => {
+            files.add(getFileName(option.value));
+        });
+    });
+
+    return [...files].filter(file => /\.(nwa|nes)$/i.test(file));
+}
+
+// Identifier le fichier associé à chaque carte
+function getCardFile(card) {
+    const button = card.querySelector(".download");
+    return button ? getFileName(button.getAttribute("href")) : null;
+}
+
+// Actualiser les compteurs
+async function updateCounters() {
+    try {
+        const response = await fetch(API_URL + "/counts", {
+            cache: "no-store"
+        });
+
+        if (!response.ok) throw new Error("Erreur de lecture");
+
+        const counts = await response.json();
+
+        cards.forEach(card => {
+            const counter = card.querySelector(".download-count");
+            const file = getCardFile(card);
+
+            if (!counter || !file) return;
+
+            counter.innerHTML =
+                `⬇ <strong>${counts[file] ?? 0}</strong> téléchargements`;
+        });
+
+    } catch (error) {
+        console.error("Erreur compteurs :", error);
+    }
+}
+
+// Créer automatiquement les entrées manquantes
+async function initializeCounters() {
+    await fetch(API_URL + "/init", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            files: getAllDownloadFiles()
+        })
+    });
+
+    await updateCounters();
+}
+
+// Compter les téléchargements
+cards.forEach(card => {
+    const button = card.querySelector(".download");
+
+    if (!button) return;
+
+    button.addEventListener("click", async event => {
+        event.preventDefault();
+
+        const url = button.href;
+        const file = getFileName(url);
+
+        try {
+            const response = await fetch(API_URL + "/increment", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ file })
+            });
+
+            if (!response.ok) {
+                throw new Error("Impossible d'enregistrer le téléchargement");
+            }
+
+            await updateCounters();
+
+        } catch (error) {
+            console.error(error);
+        }
+
+        // Lancer le téléchargement
+        window.location.href = url;
+    });
+});
+
+// Initialisation au chargement
+initializeCounters();
+
+// Actualisation toutes les 10 secondes
+setInterval(updateCounters, 10000);
+
 </script>
 
 </body>
