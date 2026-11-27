@@ -1193,28 +1193,32 @@ search.addEventListener("input", () => {
   empty.style.display = visible ? "none" : "block";
 });
 
-// Fonction pour mettre à jour le lien de téléchargement selon la version choisie
-function updateDownloadLink(selectElement) {
-  const card = selectElement.closest('.game');
-  const downloadBtn = card.querySelector('.download');
-  const filenameDisplay = card.querySelector('.filename');
-  
-  const selectedOption = selectElement.options[selectElement.selectedIndex];
-  const fileUrl = selectedOption.value;
-  const fileName = selectedOption.getAttribute('data-filename');
-  
-  downloadBtn.href = fileUrl;
-  filenameDisplay.textContent = fileName;
-}
+/* ==========================================
+   COMPTEURS LOCAUX - JEUX ET MODS
+   ========================================== */
 
-const API_URL = "URL_DE_TON_BACKEND";
+const STORAGE_KEY = "catalogue_download_counts_v2";
 
-// Récupérer le nom du fichier
+// Récupérer le nom exact du fichier
 function getFileName(url) {
     return url.split("/").pop().split("?")[0];
 }
 
-// Récupérer tous les fichiers téléchargeables
+// Charger les compteurs
+function loadCounts() {
+    try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch {
+        return {};
+    }
+}
+
+// Sauvegarder les compteurs
+function saveCounts(counts) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(counts));
+}
+
+// Récupérer tous les fichiers du catalogue
 function getAllDownloadFiles() {
     const files = new Set();
 
@@ -1225,102 +1229,93 @@ function getAllDownloadFiles() {
             files.add(getFileName(button.getAttribute("href")));
         }
 
-        card.querySelectorAll(".version-selector option").forEach(option => {
-            files.add(getFileName(option.value));
+        card.querySelectorAll("select option").forEach(option => {
+            if (option.value) {
+                files.add(getFileName(option.value));
+            }
         });
     });
 
     return [...files].filter(file => /\.(nwa|nes)$/i.test(file));
 }
 
-// Identifier le fichier associé à chaque carte
+// Initialiser les fichiers inconnus à 0
+function initializeCounters() {
+    const counts = loadCounts();
+    let changed = false;
+
+    getAllDownloadFiles().forEach(file => {
+        if (!(file in counts)) {
+            counts[file] = 0;
+            changed = true;
+        }
+    });
+
+    if (changed) saveCounts(counts);
+
+    updateCounters();
+}
+
+// Identifier le fichier actuellement sélectionné
 function getCardFile(card) {
     const button = card.querySelector(".download");
     return button ? getFileName(button.getAttribute("href")) : null;
 }
 
-// Actualiser les compteurs
-async function updateCounters() {
-    try {
-        const response = await fetch(API_URL + "/counts", {
-            cache: "no-store"
-        });
+// Afficher les compteurs
+function updateCounters() {
+    const counts = loadCounts();
 
-        if (!response.ok) throw new Error("Erreur de lecture");
+    cards.forEach(card => {
+        const counter = card.querySelector(".download-count");
+        const file = getCardFile(card);
 
-        const counts = await response.json();
+        if (!counter || !file) return;
 
-        cards.forEach(card => {
-            const counter = card.querySelector(".download-count");
-            const file = getCardFile(card);
-
-            if (!counter || !file) return;
-
-            counter.innerHTML =
-                `⬇ <strong>${counts[file] ?? 0}</strong> téléchargements`;
-        });
-
-    } catch (error) {
-        console.error("Erreur compteurs :", error);
-    }
-}
-
-// Créer automatiquement les entrées manquantes
-async function initializeCounters() {
-    await fetch(API_URL + "/init", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            files: getAllDownloadFiles()
-        })
+        counter.innerHTML =
+            `⬇ <strong>${counts[file] || 0}</strong> téléchargements`;
     });
-
-    await updateCounters();
 }
 
-// Compter les téléchargements
+// Actualiser le compteur lors d'un changement de mod
+function updateDownloadLink(selectElement) {
+    const card = selectElement.closest(".game");
+    const downloadBtn = card.querySelector(".download");
+    const filenameDisplay = card.querySelector(".filename");
+
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const fileUrl = selectedOption.value;
+    const fileName = selectedOption.getAttribute("data-filename");
+
+    downloadBtn.href = fileUrl;
+    filenameDisplay.textContent = fileName;
+
+    updateCounters();
+}
+
+// Enregistrer un téléchargement
 cards.forEach(card => {
     const button = card.querySelector(".download");
 
     if (!button) return;
 
-    button.addEventListener("click", async event => {
-        event.preventDefault();
+    button.addEventListener("click", () => {
+        const file = getFileName(button.getAttribute("href"));
+        const counts = loadCounts();
 
-        const url = button.href;
-        const file = getFileName(url);
+        counts[file] = (counts[file] || 0) + 1;
 
-        try {
-            const response = await fetch(API_URL + "/increment", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ file })
-            });
-
-            if (!response.ok) {
-                throw new Error("Impossible d'enregistrer le téléchargement");
-            }
-
-            await updateCounters();
-
-        } catch (error) {
-            console.error(error);
-        }
-
-        // Lancer le téléchargement
-        window.location.href = url;
+        saveCounts(counts);
+        updateCounters();
     });
 });
 
-// Initialisation au chargement
+// Initialisation
 initializeCounters();
 
-// Actualisation toutes les 10 secondes
+// Mise à jour toutes les 10 secondes
 setInterval(updateCounters, 10000);
+
 
 </script>
 
