@@ -1262,7 +1262,6 @@ function getCardFile(card) {
     return button ? getFileName(button.getAttribute("href")) : null;
 }
 
-// Afficher les compteurs
 function updateCounters() {
     const counts = loadCounts();
 
@@ -1272,8 +1271,7 @@ function updateCounters() {
 
         if (!counter || !file) return;
 
-        counter.innerHTML =
-            `⬇ <strong>${counts[file] || 0}</strong> téléchargements`;
+        counter.innerHTML = `⬇ <strong>${counts[file] || 0}</strong> téléchargements`;
     });
 }
 
